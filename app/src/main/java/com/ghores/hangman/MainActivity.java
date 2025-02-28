@@ -1,15 +1,15 @@
 package com.ghores.hangman;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
 
+public class MainActivity extends AppCompatActivity {
     private String wordDashed;
+
     private String selectWord() {
         return "Hello";
     }
@@ -83,11 +83,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Log.i("test", "word not contains " + letter);
                 }
-
                 textView.setVisibility(View.INVISIBLE);
             }
         };
-
         txt_a.setOnClickListener(listener);
         txt_b.setOnClickListener(listener);
         txt_c.setOnClickListener(listener);
@@ -114,6 +112,5 @@ public class MainActivity extends AppCompatActivity {
         txt_x.setOnClickListener(listener);
         txt_y.setOnClickListener(listener);
         txt_z.setOnClickListener(listener);
-
     }
 }
