@@ -1,19 +1,17 @@
 package com.ghores.hangman;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private String wordDashed;
-
-    private String selectWord() {
-        return "Hello";
-    }
-
+    private int failCount = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
                 wordDashed += " ";
             }
         }
+
+        ImageView img_face = findViewById(R.id.img_face);
+        img_face.setImageResource(R.drawable.face_1);
 
         TextView txt_word = findViewById(R.id.txt_word);
         txt_word.setText(wordDashed);
@@ -78,10 +79,40 @@ public class MainActivity extends AppCompatActivity {
                             wordDashed = new String(wordDashedCharArray);
                             txt_word.setText(wordDashed);
                             Log.i("test", " Found at index " + i);
+                            if (!wordDashed.contains("-")) {
+                                Intent intent = new Intent(MainActivity.this, FinishActivity.class);
+                                intent.putExtra("result", "WON");
+                                MainActivity.this.startActivity(intent);
+                                finish();
+                                Log.i("test", "Game won");
+                                return;
+                            }
                         }
                     }
                 } else {
                     Log.i("test", "word not contains " + letter);
+                    failCount++;
+                    if (failCount >= 8) {
+                        img_face.setImageResource(R.drawable.face_9);
+                        Intent intent = new Intent(MainActivity.this, FinishActivity.class);
+                        intent.putExtra("result", "LOST");
+                        MainActivity.this.startActivity(intent);
+                        finish();
+                        Log.i("test", "Game over " + failCount);
+                        return;
+                    }
+                    int imageId = R.drawable.face_1;
+                    switch (failCount) {
+                        case 1: imageId = R.drawable.face_2;break;
+                        case 2: imageId = R.drawable.face_3;break;
+                        case 3: imageId = R.drawable.face_4;break;
+                        case 4: imageId = R.drawable.face_5;break;
+                        case 5: imageId = R.drawable.face_6;break;
+                        case 6: imageId = R.drawable.face_7;break;
+                        case 7: imageId = R.drawable.face_8;break;
+                        case 8: imageId = R.drawable.face_9;break;
+                    }
+                    img_face.setImageResource(imageId);
                 }
                 textView.setVisibility(View.INVISIBLE);
             }
@@ -112,5 +143,25 @@ public class MainActivity extends AppCompatActivity {
         txt_x.setOnClickListener(listener);
         txt_y.setOnClickListener(listener);
         txt_z.setOnClickListener(listener);
+    }
+    private String selectWord() {
+        String[] words = {
+                "Object Oriented",
+                "Polymorphism",
+                "Encapsulation",
+                "Interface",
+                "Composition",
+                "Android",
+                "Development",
+                "Programming",
+                "Design",
+                "Research",
+                "Google",
+                "Refactoring",
+                "Renaming",
+                "Documentation",
+        };
+        int randomIndex = (int) (Math.random() * words.length);
+        return words[randomIndex];
     }
 }
